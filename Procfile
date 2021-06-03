@@ -1,0 +1,1 @@
+web: ./build/install/kotlin-heroku/bin/kotlin-heroku
