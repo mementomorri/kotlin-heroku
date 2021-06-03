@@ -1,2 +1,2 @@
 # kotlin-heroku
-Working deploy URL: https://kotlin-heroku-test.herokuapp.com/
+Deploy at: https://kotlin-heroku-test.herokuapp.com/
