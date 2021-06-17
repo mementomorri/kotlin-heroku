@@ -49,11 +49,11 @@ open class Task (
 }
 
 fun Task.getDifficulty(): TaskDifficulty {
-    return TaskDifficulty.valueOf(this.difficulty.toUpperCase())
+    return TaskDifficulty.valueOf(this.difficulty.uppercase())
 }
 
 fun Task.getType(): TaskType {
-    return TaskType.valueOf(this.type.toUpperCase())
+    return TaskType.valueOf(this.type.uppercase())
 }
 
 class TaskTable(): Table(){
