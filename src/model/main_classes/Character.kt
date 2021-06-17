@@ -28,7 +28,7 @@ class Character (
 ) {
     @kotlinx.serialization.Transient
     @SerialName("maximumHP_public")
-    var maximumHP = maximumHP_ ?: when (CharacterClass.valueOf(characterClass.toUpperCase())) {
+    var maximumHP = maximumHP_ ?: when (CharacterClass.valueOf(characterClass.uppercase())) {
         CharacterClass.MAGICIAN -> 30
         CharacterClass.ARCHER -> 40
         CharacterClass.WARRIOR -> 50
@@ -152,7 +152,7 @@ class Character (
             taskTable.selectAll().mapNotNull { taskTable.readResult(it) }
         }.firstOrNull {
             it.characterId == task.characterId
-                    && TaskType.valueOf(it.type.toUpperCase()) == TaskType.valueOf(task.type.toUpperCase())
+                    && TaskType.valueOf(it.type.uppercase()) == TaskType.valueOf(task.type.uppercase())
                     && it.name == task.name
         }
         if (duplicateCheck == null) {
@@ -167,7 +167,7 @@ class Character (
             taskTable.selectAll().mapNotNull { taskTable.readResult(it) }
         }.firstOrNull {
             it.characterId == task.characterId
-                    && TaskType.valueOf(it.type.toUpperCase()) == TaskType.valueOf(task.type.toUpperCase())
+                    && TaskType.valueOf(it.type.uppercase()) == TaskType.valueOf(task.type.uppercase())
                     && it.name == task.name
         }
         return resultCheck != null
@@ -179,7 +179,7 @@ class Character (
             taskTable.selectAll().mapNotNull { taskTable.readResult(it) }
         }.firstOrNull {
             it.characterId == this.id
-                    && TaskType.valueOf(it.type.toUpperCase()) == taskType
+                    && TaskType.valueOf(it.type.uppercase()) == taskType
                     && it.name == taskName
         }
         if (existanceCheck != null) {
@@ -191,7 +191,7 @@ class Character (
             taskTable.selectAll().mapNotNull { taskTable.readResult(it) }
         }.firstOrNull {
             it.characterId == this.id
-                    && TaskType.valueOf(it.type.toUpperCase()) == taskType
+                    && TaskType.valueOf(it.type.uppercase()) == taskType
                     && it.name == taskName
         }
         return checkResults == null
@@ -355,7 +355,7 @@ class Character (
         //checks whether character has enough experience points, levels character up respectively
         val i = levelMap.indexOf(levelMap.firstOrNull { it <= this.experiencePoints })
         if (this.level < (i + 2)) {
-            when (CharacterClass.valueOf(this.characterClass.toUpperCase())) {
+            when (CharacterClass.valueOf(this.characterClass.uppercase())) {
                 CharacterClass.MAGICIAN -> this.maximumHP += ((i + 2) - this.level) * 3
                 CharacterClass.ARCHER -> this.maximumHP += ((i + 2) - this.level) * 4
                 CharacterClass.WARRIOR -> this.maximumHP += ((i + 2) - this.level) * 5
