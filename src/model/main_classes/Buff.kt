@@ -10,6 +10,7 @@ import java.time.LocalDate
 @Serializable
 open class Buff(
         val name:String,
+        @kotlinx.serialization.ExperimentalSerializationApi
         @Serializable(with=DateSerializer::class)
         val duration: LocalDate = LocalDate.now().plusDays(1),
         val character_id: Int
