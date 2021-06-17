@@ -15,11 +15,11 @@ import java.time.LocalDate
 @kotlinx.serialization.ExperimentalSerializationApi
 @Serializer(forClass = LocalDate::class)
 object DateSerializer : KSerializer<LocalDate> {
-
+    @kotlinx.serialization.ExperimentalSerializationApi
     override fun serialize(output: Encoder, obj: LocalDate) {
         output.encodeString(obj.toString())
     }
-
+    @kotlinx.serialization.ExperimentalSerializationApi
     override fun deserialize(input: Decoder): LocalDate {
         return LocalDate.parse(input.decodeString())
     }
@@ -32,8 +32,10 @@ open class Task (
         open var difficulty: String = "MEDIUM",
         val type: String,
         open val characterId: Int,
+        @kotlinx.serialization.ExperimentalSerializationApi
         @Serializable(with= model.main_classes.DateSerializer::class)
         open var deadline: LocalDate?= null,
+        @kotlinx.serialization.ExperimentalSerializationApi
         @Serializable(with= model.main_classes.DateSerializer::class)
         open val startDate: LocalDate?= null,
         open var completionCount: Int?= 0,
