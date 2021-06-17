@@ -4,6 +4,9 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val kotlin_exposed: String by project
+val h2_database: String by project
+val kotlinx_serialization: String by project
 
 plugins {
     application
@@ -32,13 +35,13 @@ dependencies {
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-jackson:$ktor_version")
     implementation("io.ktor:ktor-serialization:$ktor_version")
-    implementation("org.jetbrains.exposed:exposed-core:0.31.1")
-    implementation("org.jetbrains.exposed:exposed-dao:0.31.1")
-    implementation("org.jetbrains.exposed:exposed-jdbc:0.31.1")
-    implementation("org.jetbrains.exposed:exposed-java-time:0.31.1")
-    implementation("com.h2database:h2:1.4.200")
+    implementation("org.jetbrains.exposed:exposed-core:$kotlin_exposed")
+    implementation("org.jetbrains.exposed:exposed-dao:$kotlin_exposed")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$kotlin_exposed")
+    implementation("org.jetbrains.exposed:exposed-java-time:$kotlin_exposed")
+    implementation("com.h2database:h2:$h2_database")
     implementation("io.ktor:ktor-jackson:$ktor_version")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.2.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:$kotlinx_serialization")
     testImplementation("io.ktor:ktor-server-tests:$ktor_version")
 }
 
