@@ -12,6 +12,7 @@ import org.jetbrains.exposed.sql.`java-time`.date
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import java.time.LocalDate
 
+@kotlinx.serialization.ExperimentalSerializationApi
 @Serializer(forClass = LocalDate::class)
 object DateSerializer : KSerializer<LocalDate> {
 
