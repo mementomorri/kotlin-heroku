@@ -7,6 +7,7 @@ import io.ktor.features.*
 import io.ktor.routing.*
 import io.ktor.http.*
 import com.fasterxml.jackson.databind.*
+import com.google.gson.Gson
 import io.ktor.jackson.*
 import model.abilities.*
 import model.challenges.challenges
@@ -56,7 +57,9 @@ fun Application.module(testing: Boolean = false) {
 
     routing {
         get("/") {
-            call.respondText("HELLO WORLD!", contentType = ContentType.Text.Plain)
+            val resp= Gson().toJson("HELLO WORLD!")
+            call.respondText(resp, contentType = ContentType.Application.Json)
+            call.response.header("Access-Control-Allow-Origin", "*")
         }
 
         get("/json/jackson") {
