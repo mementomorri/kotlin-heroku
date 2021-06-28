@@ -27,13 +27,14 @@ fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 @kotlin.jvm.JvmOverloads
 fun Application.module(testing: Boolean = false) {
     install(CORS) {
+        method(HttpMethod.Get)
+        method(HttpMethod.Post)
+        header(HttpHeaders.Origin)
+        header(HttpHeaders.ContentType)
         method(HttpMethod.Options)
         method(HttpMethod.Put)
         method(HttpMethod.Delete)
         method(HttpMethod.Patch)
-        method(HttpMethod.Get)
-        header(HttpHeaders.Authorization)
-        allowCredentials = true
         anyHost()
     }
 
