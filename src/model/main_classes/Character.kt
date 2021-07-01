@@ -127,6 +127,18 @@ class Character (
         return result.toList()
     }
 
+    fun getTaskList(): List<Task> {
+        //reads tasks table and returns all tasks this character owns
+        val result = mutableListOf<Task>()
+        transaction {
+            taskTable.selectAll().mapNotNull { taskTable.readResult(it) }
+        }.forEach { task ->
+            if (task.characterId == this.id) result
+                .add(Task(task.name, task.description, task.difficulty,task.type, task.characterId, task.deadline,task.startDate,task.completionCount))
+        }
+        return result.toList()
+    }
+
     val inventory: List<Item>
         get() = getInventoryList()
 
