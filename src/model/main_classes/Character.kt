@@ -127,7 +127,10 @@ class Character (
         return result.toList()
     }
 
-    fun getTaskList(): List<Task> {
+    val allTasks: List<Task>
+        get() = getTaskList()
+
+    private fun getTaskList(): List<Task> {
         //reads tasks table and returns all tasks this character owns
         val result = mutableListOf<Task>()
         transaction {
