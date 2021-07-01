@@ -121,12 +121,25 @@ fun Application.characterRest(
                 )
             }
         }
+        route("$path/{characterId}/tasks"){
+            get {
+                call.respond(
+                    parseCharacterId()?.let { id ->
+                        repo.read(id)?.let { character ->
+                            character.getTaskList()
+                            HttpStatusCode.OK
+                        }?: HttpStatusCode.NotFound
+                    }?: HttpStatusCode.BadRequest
+                )
+            }
+        }
         route("$path/{characterId}/habits"){
             get {
                 call.respond(
                         parseCharacterId()?.let { id ->
                             repo.read(id)?.let { character ->
                                 character.habits
+                                HttpStatusCode.OK
                             }?: HttpStatusCode.NotFound
                         }?: HttpStatusCode.BadRequest
                 )
