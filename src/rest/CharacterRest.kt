@@ -126,8 +126,7 @@ fun Application.characterRest(
                 call.respond(
                     parseCharacterId()?.let { id ->
                         repo.read(id)?.let { character ->
-                            character.getTaskList()
-                            HttpStatusCode.OK
+                            character.allTasks
                         }?: HttpStatusCode.NotFound
                     }?: HttpStatusCode.BadRequest
                 )
@@ -139,7 +138,6 @@ fun Application.characterRest(
                         parseCharacterId()?.let { id ->
                             repo.read(id)?.let { character ->
                                 character.habits
-                                HttpStatusCode.OK
                             }?: HttpStatusCode.NotFound
                         }?: HttpStatusCode.BadRequest
                 )
