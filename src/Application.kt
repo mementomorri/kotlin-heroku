@@ -104,6 +104,8 @@ private fun initDB() {
         character.addTask(Daily("Stretch at the morning", "Stretch at least 5 minutes a day", "EASY", character.id))
         character.addTask(ToDo("test todo", "just a test todo", "VERYEASY", character.id))
     }
+    
+    charactersRepo.read(1).addTask(Habit("Take care of eyes", "Relax my eyes for a while after another of work at the computer", "VERYEASY", 1))
 
     transaction {
         challenges.insert {
