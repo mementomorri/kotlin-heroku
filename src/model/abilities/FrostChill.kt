@@ -1,6 +1,9 @@
 package model.abilities
 
-import model.main_classes.Character
+import me.mementomorri.model.main_classes.Adventurer
+import model.main_classes.objectivesRepo
+import java.time.format.DateTimeFormatter
+import java.time.LocalDate
 
 class FrostChill(): Ability(
         "Frost chill",
@@ -9,15 +12,15 @@ class FrostChill(): Ability(
         40,
         9
 ) {
-    fun useAbility(character: Character): Boolean {
-        return if (character.energyPoints >= energyRequired){
-            character.dailies.forEach {
-                it.deadline?.plusDays(1)
+    fun useAbility(adventurer: Adventurer): Boolean {
+        return if (adventurer.energyPoints >= energyRequired){
+            objectivesRepo.read().filter { it.adventurerId == adventurer.id && it.type == "DAILY" }.forEach {
+                LocalDate.parse(it.deadline.toString(), DateTimeFormatter.ISO_DATE)?.plusDays(1)
             }
-            character.toDos.forEach {
-                it.deadline?.plusDays(1)
+            objectivesRepo.read().filter { it.adventurerId == adventurer.id && it.type == "TODO" }.forEach {
+                LocalDate.parse(it.deadline.toString(), DateTimeFormatter.ISO_DATE)?.plusDays(1)
             }
-            character.energyPoints.minus(energyRequired)
+            adventurer.energyPoints.minus(energyRequired)
             true
         } else false
     }

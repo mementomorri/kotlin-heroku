@@ -1,9 +1,10 @@
 package model.challenges
 
-import model.main_classes.charactersRepo
 import kotlinx.serialization.Serializable
+import me.mementomorri.model.main_classes.Adventurer
 import model.main_classes.Reward
-import model.main_classes.Character
+import model.main_classes.adventurersRepo
+import model.main_classes.objectivesRepo
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
@@ -15,19 +16,19 @@ open class Challenge (
 ) {
     open val rewards: Reward = Reward(0, 20, null)
 
-    open fun checkChallengeCondition(character: Character): Boolean=true //true if condition passed, false otherwise
+    open fun checkChallengeCondition(adventurer: Adventurer): Boolean=true //true if condition passed, false otherwise
 
-    open fun getReward(character: Character){
-        if (checkChallengeCondition(character)) {
-            rewards.getReward(character)
+    open fun getReward(adventurer: Adventurer){
+        if (checkChallengeCondition(adventurer)) {
+            rewards.getReward(adventurer)
         }
     }
 }
 
-fun Challenge.checkShowingTheAttitudeCond(characterId: Int) :Boolean{
-    val character= charactersRepo.read(characterId)
+fun Challenge.checkShowingTheAttitudeCond(adventurerID: Int) :Boolean{
+    val character= adventurersRepo.read(adventurerID)
     return if (character == null) false else {
-        character.dailies.firstOrNull { it.completionCount!! >= 5 } != null
+        objectivesRepo.read().filter {it.adventurerId == adventurerID && it.type=="DAILY" }.firstOrNull { it.completionCount!! >= 5 } != null
     }
 }
 

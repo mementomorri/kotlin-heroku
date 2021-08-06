@@ -1,7 +1,7 @@
 package model.items
 
 import kotlinx.serialization.Serializable
-import model.main_classes.characterTable
+import me.mementomorri.model.main_classes.adventurerTable
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import repo.DefaultIdTable
@@ -22,38 +22,38 @@ open class Item(
     }
 }
 
-fun Item.useCoffee(characterId: Int){
-    Coffee(this.quantity).useItem(characterId)
+fun Item.useCoffee(adventurerId: Int){
+    Coffee(this.quantity).useItem(adventurerId)
 }
 
-fun Item.useDishDisasterScroll(characterId: Int){
-    DishDisasterScroll(this.quantity).useItem(characterId)
+fun Item.useDishDisasterScroll(adventurerId: Int){
+    DishDisasterScroll(this.quantity).useItem(adventurerId)
 }
 
-fun Item.useDustRabbitsScroll(characterId: Int){
-    DustRabbitsScroll(this.quantity).useItem(characterId)
+fun Item.useDustRabbitsScroll(adventurerId: Int){
+    DustRabbitsScroll(this.quantity).useItem(adventurerId)
 }
 
-fun Item.useGreenTea(characterId: Int){
-    GreenTea(this.quantity).useItem(characterId)
+fun Item.useGreenTea(adventurerId: Int){
+    GreenTea(this.quantity).useItem(adventurerId)
 }
 
-fun Item.useHealingPotion(characterId: Int){
-    HealingPotion(this.quantity).useItem(characterId)
+fun Item.useHealingPotion(adventurerId: Int){
+    HealingPotion(this.quantity).useItem(adventurerId)
 }
 
-fun Item.useMagicInBottleScroll(characterId: Int){
-    MagicInBottleScroll(this.quantity).useItem(characterId)
+fun Item.useMagicInBottleScroll(adventurerId: Int){
+    MagicInBottleScroll(this.quantity).useItem(adventurerId)
 }
 
-class CharacterItemFiller(
-        val item_id: Int,
-        val character_id: Int,
-        var quantity: Int= 1,
-        val id: Int= -1
+class AdventurerItemFiller(
+    val item_id: Int,
+    val adventurer_id: Int,
+    var quantity: Int= 1,
+    val id: Int= -1
 ){
     override fun toString(): String {
-        return "id=$id, item_id=$item_id, character_id=$character_id, quantity=$quantity"
+        return "id=$id, item_id=$item_id, adventurer_id=$adventurer_id, quantity=$quantity"
     }
 }
 
@@ -81,24 +81,24 @@ class ItemsTable: DefaultIdTable<Item>(){
 
 val itemTable= ItemsTable()
 
-class CharacterItemTable: DefaultIdTable<CharacterItemFiller>(){
+class AdventurerItemTable: DefaultIdTable<AdventurerItemFiller>(){
     val item_id= reference("item_id", itemTable)
-    val character_id= reference("character_id", characterTable)
+    val adventurer_id= reference("adventurer_id", adventurerTable)
     var quantity= integer("quantity")
 
-    override fun fill(builder: UpdateBuilder<Int>, item: CharacterItemFiller) {
+    override fun fill(builder: UpdateBuilder<Int>, item: AdventurerItemFiller) {
         builder[item_id]= item.item_id
-        builder[character_id]= item.character_id
+        builder[adventurer_id]= item.adventurer_id
         builder[quantity]= item.quantity
     }
 
     override fun readResult(result: ResultRow)=
-            CharacterItemFiller(
+            AdventurerItemFiller(
                     result[item_id].value,
-                    result[character_id].value,
+                    result[adventurer_id].value,
                     result[quantity],
                     result[id].value
             )
 }
 
-val characterItemTable= CharacterItemTable()
+val adventurerItemTable= AdventurerItemTable()

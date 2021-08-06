@@ -1,7 +1,8 @@
 package model.challenges
 
-import model.main_classes.Character
+import me.mementomorri.model.main_classes.Adventurer
 import model.main_classes.Reward
+import model.main_classes.objectivesRepo
 
 class SolidHabit ():Challenge(
         "Solid habit",
@@ -9,8 +10,8 @@ class SolidHabit ():Challenge(
 ) {
     override val rewards: Reward = Reward(0, 15, null)
 
-    override fun checkChallengeCondition(character: Character): Boolean {
-        return character.habits.firstOrNull{ it.completionCount!! >= 90} != null
+    override fun checkChallengeCondition(adventurer: Adventurer): Boolean {
+        return objectivesRepo.read().filter {it.adventurerId == adventurer.id && it.type=="HABITS" }.firstOrNull{ it.completionCount!! >= 90} != null
     }
 }
 

@@ -1,7 +1,7 @@
 package model.abilities
 
-import model.main_classes.charactersRepo
-import model.main_classes.Character
+import me.mementomorri.model.main_classes.Adventurer
+import model.main_classes.adventurersRepo
 
 class HuntersFocus (): Ability(
         "Hunter's focus",
@@ -10,12 +10,12 @@ class HuntersFocus (): Ability(
         20,
         3
 ) {
-    fun useAbility(character: Character): Boolean {
-        return if (character.energyPoints>= energyRequired){
-            character.experiencePoints+=(character.level*2.5).toInt()
-            character.checkExperience()
-            character.experiencePoints.minus(energyRequired)
-            charactersRepo.update(character.id, character)
+    fun useAbility(adventurer: Adventurer): Boolean {
+        return if (adventurer.energyPoints>= energyRequired){
+            adventurer.experiencePoints+=(adventurer.level*2.5).toInt()
+            adventurer.checkExperience()
+            adventurer.experiencePoints.minus(energyRequired)
+            adventurersRepo.update(adventurer.id, adventurer)
             true
         } else false
     }

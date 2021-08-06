@@ -1,8 +1,8 @@
 package model.abilities
 
-import model.main_classes.charactersRepo
+import me.mementomorri.model.main_classes.Adventurer
 import model.main_classes.Buff
-import model.main_classes.Character
+import model.main_classes.adventurersRepo
 import model.main_classes.buffTable
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -14,13 +14,13 @@ class GreedyProfit (): Ability(
         40,
         6
 ) {
-    fun useAbility(character: Character): Boolean {
-        return if (character.energyPoints>=energyRequired){
+    fun useAbility(adventurer: Adventurer): Boolean {
+        return if (adventurer.energyPoints>=energyRequired){
             transaction {
-                buffTable.insert { fill(it, Buff("Greedy", character_id = character.id)) }
+                buffTable.insert { fill(it, Buff("Greedy", adventurer_id = adventurer.id)) }
             }
-            character.energyPoints.minus(40)
-            charactersRepo.update(character.id, character)
+            adventurer.energyPoints.minus(40)
+            adventurersRepo.update(adventurer.id, adventurer)
             true
         } else false
     }

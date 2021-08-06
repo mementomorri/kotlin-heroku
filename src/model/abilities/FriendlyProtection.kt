@@ -1,8 +1,8 @@
 package model.abilities
 
-import model.main_classes.charactersRepo
+import me.mementomorri.model.main_classes.Adventurer
 import model.main_classes.Buff
-import model.main_classes.Character
+import model.main_classes.adventurersRepo
 import model.main_classes.buffTable
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -14,25 +14,25 @@ class FriendlyProtection (): Ability(
         40,
         6
 ) {
-    fun useAbility(character: Character): Boolean {
-        return if (character.energyPoints>= energyRequired){
+    fun useAbility(adventurer: Adventurer): Boolean {
+        return if (adventurer.energyPoints>= energyRequired){
             transaction {
-                buffTable.insert { fill(it, Buff("Friendly protection", character_id = character.id)) }
+                buffTable.insert { fill(it, Buff("Friendly protection", adventurer_id = adventurer.id)) }
             }
-            character.energyPoints.minus(energyRequired)
-            charactersRepo.update(character.id, character)
+            adventurer.energyPoints.minus(energyRequired)
+            adventurersRepo.update(adventurer.id, adventurer)
             true
         } else false
     }
 
-    fun protectOtherPerson(caster: Character, personToProtect: Character):Boolean{
+    fun protectOtherPerson(caster: Adventurer, personToProtect: Adventurer):Boolean{
         return if (caster.energyPoints>= energyRequired){
             transaction {
-                buffTable.insert { fill(it, Buff("Friendly protection", character_id = personToProtect.id)) }
+                buffTable.insert { fill(it, Buff("Friendly protection", adventurer_id = personToProtect.id)) }
             }
             caster.energyPoints.minus(energyRequired)
-            charactersRepo.update(caster.id, caster)
-            charactersRepo.update(personToProtect.id, personToProtect)
+            adventurersRepo.update(caster.id, caster)
+            adventurersRepo.update(personToProtect.id, personToProtect)
             true
         } else false
     }

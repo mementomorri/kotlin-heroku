@@ -9,6 +9,12 @@ import io.ktor.http.*
 import com.fasterxml.jackson.databind.*
 import com.google.gson.Gson
 import io.ktor.jackson.*
+import me.mementomorri.model.main_classes.Adventurer
+import me.mementomorri.model.main_classes.Objective
+import me.mementomorri.model.main_classes.adventurerTable
+import me.mementomorri.model.main_classes.objectiveTable
+import me.mementomorri.rest.adventurersRest
+import me.mementomorri.rest.objectivesRest
 import model.abilities.*
 import model.challenges.challenges
 import model.challenges.showingTheAttitude
@@ -20,6 +26,8 @@ import org.jetbrains.exposed.sql.SchemaUtils
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.transactions.transaction
 import rest.*
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 fun main(args: Array<String>): Unit = io.ktor.server.netty.EngineMain.main(args)
 
@@ -54,13 +62,21 @@ fun Application.module(testing: Boolean = false) {
     challengeRest()
     shopRest()
     userRest()
-    characterRest()
+    adventurersRest()
+    objectivesRest()
 
     routing {
         get("/") {
             val resp= Gson().toJson("HELLO WORLD!")
             call.respondText(resp, contentType = ContentType.Application.Json)
             call.response.header("Access-Control-Allow-Origin", "*")
+        }
+        post("/") {
+            val text:String= call.receive()
+            if (text.isNotEmpty()) {
+                call.respond(HttpStatusCode.OK, "Text received")
+                println(text)
+            }else call.respond(HttpStatusCode.BadRequest)
         }
 
         get("/json/jackson") {
@@ -71,19 +87,20 @@ fun Application.module(testing: Boolean = false) {
 
 private fun initDB() {
     transaction {
-        SchemaUtils.create(userTable, userCharacterTable, taskTable, buffTable, characterItemTable, characterAbilityTable, characterTable, itemTable, abilityTable, challenges)
+        SchemaUtils.create(userTable, userAdventurerTable, adventurerTable,
+            buffTable, adventurerItemTable, adventurerAbilityTable, itemTable, abilityTable, challenges, objectiveTable)
     }
     userTable.addUser(User("Alice", "4l1c3"))
     userTable.addUser(User("Bob", "b0bb1e"))
     userTable.addUser(User("Charlie", "ch4rl13"))
 
-    charactersRepo.create(Character("Alice", "MAGICIAN", 1))
-    charactersRepo.create(Character("Bob", "WARRIOR", 2))
-    charactersRepo.create(Character("Charlie", "ARCHER", 3))
+    adventurersRepo.create(Adventurer("Alice", "MAGICIAN", 1))
+    adventurersRepo.create(Adventurer("Bob", "WARRIOR", 2))
+    adventurersRepo.create(Adventurer("Charlie", "ARCHER", 3))
 
-    userCharacterTable.addPossession(1, 1)
-    userCharacterTable.addPossession(2, 2)
-    userCharacterTable.addPossession(3, 3)
+    userAdventurerTable.addPossession(1, 1)
+    userAdventurerTable.addPossession(2, 2)
+    userAdventurerTable.addPossession(3, 3)
 
     shopRepo.create(HealingPotion(20))
     shopRepo.create(GreenTea(20))
@@ -99,13 +116,16 @@ private fun initDB() {
     abilitiesRepo.create(huntersFocus)
     abilitiesRepo.create(swordplayPractice)
 
-    charactersRepo.read().forEach { character ->
-        character.addTask(Habit("Brush the teeth", "Brush the teeth every morning", "VERYEASY", character.id))
-        character.addTask(Daily("Stretch at the morning", "Stretch at least 5 minutes a day", "EASY", character.id))
-        character.addTask(ToDo("test todo", "just a test todo", "VERYEASY", character.id))
+    objectivesRepo.create(Objective(1, "Touch the beauty", "Touch Mosi's tail","DAILY", 1, "HARD",null,null,0))
+
+    adventurersRepo.read().forEach { adventurer ->
+        objectivesRepo.create(Objective(nextObjectiveId(),"Brush the teeth", "Brush the teeth every morning",
+            "HABIT",adventurer.id,"VERYEASY",null,LocalDate.now().format(DateTimeFormatter.ISO_DATE)))
+        objectivesRepo.create(Objective(nextObjectiveId(),"Stretch at the morning", "Stretch at least 5 minutes a day", "DAILY",adventurer.id,"EASY",
+            LocalDate.now().plusDays(1).format(DateTimeFormatter.ISO_DATE),LocalDate.now().format(DateTimeFormatter.ISO_DATE)))
+        objectivesRepo.create(Objective(nextObjectiveId(),"Pet the cats", "Pet Mosi and Simi", "TODO", adventurer.id, "MEDIUM",
+        LocalDate.now().plusWeeks(1).format(DateTimeFormatter.ISO_DATE),LocalDate.now().format(DateTimeFormatter.ISO_DATE)))
     }
-    
-    charactersRepo.read(1)!!.addTask(Habit("Take care of eyes", "Relax my eyes for a while after another day of work at the computer", "VERYEASY", 1))
 
     transaction {
         challenges.insert {
@@ -119,4 +139,8 @@ private fun initDB() {
     }
     println("Database default state initialized")
     println("Start of use case tests")
+}
+
+fun nextObjectiveId():Int{
+    return objectivesRepo.read().size.plus(1)
 }

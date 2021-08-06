@@ -1,7 +1,7 @@
 package model.abilities
 
-import model.main_classes.charactersRepo
-import model.main_classes.Character
+import me.mementomorri.model.main_classes.Adventurer
+import model.main_classes.adventurersRepo
 
 class CheeringWords(): Ability(
         "Cheering words",
@@ -10,27 +10,27 @@ class CheeringWords(): Ability(
         40,
         6
 ) {
-    fun useAbility(character: Character): Boolean {
-        return if (character.maximumHP == character.healthPoints || character.energyPoints< energyRequired){
+    fun useAbility(adventurer: Adventurer): Boolean {
+        return if (adventurer.maximumHP == adventurer.healthPoints || adventurer.energyPoints< energyRequired){
             false
         } else {
-            character.healthPoints.plus((character.level*4))
-            if (character.healthPoints>character.maximumHP) character.healthPoints=character.maximumHP
-            character.energyPoints.minus(energyRequired)
-            charactersRepo.update(character.id, character)
+            adventurer.healthPoints.plus((adventurer.level*4))
+            if (adventurer.healthPoints>adventurer.maximumHP) adventurer.healthPoints=adventurer.maximumHP
+            adventurer.energyPoints.minus(energyRequired)
+            adventurersRepo.update(adventurer.id, adventurer)
             true
         }
     }
 
-    fun healOtherPerson(caster: Character, personToHeal: Character): Boolean{
+    fun healOtherPerson(caster: Adventurer, personToHeal: Adventurer): Boolean{
         return if (personToHeal.maximumHP == personToHeal.healthPoints || caster.energyPoints< energyRequired){
             false
         } else {
             personToHeal.healthPoints.plus(caster.level*4)
             if (personToHeal.healthPoints> personToHeal.maximumHP) personToHeal.healthPoints=(personToHeal.maximumHP)
             caster.energyPoints.minus(energyRequired)
-            charactersRepo.update(caster.id, caster)
-            charactersRepo.update(personToHeal.id, personToHeal)
+            adventurersRepo.update(caster.id, caster)
+            adventurersRepo.update(personToHeal.id, personToHeal)
             true
         }
     }

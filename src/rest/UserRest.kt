@@ -28,7 +28,7 @@ fun Application.userRest(
                         if (repo.create(elem))
                             HttpStatusCode.Created
                         else
-                            HttpStatusCode.NotFound
+                            HttpStatusCode.Conflict
                     } ?: HttpStatusCode.BadRequest
                 )
             }

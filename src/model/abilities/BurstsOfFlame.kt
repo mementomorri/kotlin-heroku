@@ -1,7 +1,7 @@
 package model.abilities
 
-import model.main_classes.charactersRepo
-import model.main_classes.Character
+import me.mementomorri.model.main_classes.Adventurer
+import model.main_classes.adventurersRepo
 
 class BurstsOfFlame(): Ability(
         "Bursts of flame",
@@ -10,12 +10,12 @@ class BurstsOfFlame(): Ability(
         20,
         3
 ) {
-    fun useAbility(character: Character): Boolean {
-        return if (character.energyPoints >= energyRequired){
-            character.experiencePoints+=(character.level*3)
-            character.checkExperience()
-            character.energyPoints.minus(energyRequired)
-            charactersRepo.update(character.id, character)
+    fun useAbility(adventurer: Adventurer): Boolean {
+        return if (adventurer.energyPoints >= energyRequired){
+            adventurer.experiencePoints+=(adventurer.level*3)
+            adventurer.checkExperience()
+            adventurer.energyPoints.minus(energyRequired)
+            adventurersRepo.update(adventurer.id, adventurer)
             true
         } else false
     }

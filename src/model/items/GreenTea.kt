@@ -1,6 +1,6 @@
 package model.items
 
-import model.main_classes.charactersRepo
+import model.main_classes.adventurersRepo
 import org.jetbrains.exposed.sql.and
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -9,8 +9,8 @@ class GreenTea (
         override var quantity: Int
 ): Item(quantity,"Green tea","A cup of tasty green tea, after a few sips it restores some of your energy",9) {
 
-    fun useItem(characterId: Int){
-        val character= charactersRepo.read(characterId)
+    fun useItem(adventurerID: Int){
+        val character= adventurersRepo.read(adventurerID)
         if (character == null){
             return
         }else {
@@ -19,7 +19,7 @@ class GreenTea (
                 if (character.energyPoints > 100) character.energyPoints = 100
                 quantity--
                 if (quantity <= 0) transaction {
-                    characterItemTable.deleteWhere { (characterItemTable.character_id eq characterId) and  (characterItemTable.item_id eq this@GreenTea.id)}
+                    adventurerItemTable.deleteWhere { (adventurerItemTable.adventurer_id eq adventurerID) and(adventurerItemTable.item_id eq this@GreenTea.id)}
                 }
             }
         }
