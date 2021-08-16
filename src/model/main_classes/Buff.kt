@@ -27,7 +27,7 @@ class BuffTable: Table(){
                 builder[adventurer_id] = item.adventurer_id
         }
 
-        fun readResult(result: ResultRow): Buff? =
+        fun readResult(result: ResultRow): Buff =
                 Buff(
                         result[name],
                         result[duration],

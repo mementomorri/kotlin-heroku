@@ -178,50 +178,50 @@ fun completeObjective(adventurerID: Int, objectiveID: Int):Boolean {
                     throw Exception("can't get Habit with taskName:${objective.name} while trying to complete it", e)
                 }
             }
-            ObjectiveType.DAILY ->{
-                try {
-                    if (objective.checkDeadline()) {
-                        objective.completionCount = objective.completionCount?.plus(1)
-                        if (isGreedy == null) {
-                            Reward(
-                                2 * objectiveDifficultyToInt(objective),
-                                2 * objectiveDifficultyToInt(objective),
-                                null
-                            ).getReward(adventurer)
-                        } else {
-                            Reward(
-                                2 * objectiveDifficultyToInt(objective),
-                                2 * objectiveDifficultyToInt(objective),
-                                null
-                            ).getGreedyReward(adventurer)
-                        }
-                        LocalDate.parse(objective.deadline.toString(), DateTimeFormatter.ISO_DATE)?.plusDays(1)
-                        transaction {
-                            objectiveTable.update({
-                                (objectiveTable.adventurerId eq adventurer.id) and (objectiveTable.name eq objective.name)
-                            }) {
-                                fill(it, objective)
-                            } > 0
-                        }
-                        adventurersRepo.update(adventurerID, adventurer)
-                        return true
-                    } else {
-                        if (adventurer.buffs.firstOrNull {
-                                it.name == "Friendly protection"
-                                        || it.name == "Shield protection"
-                            } == null) {
-                            adventurer.healthPoints.minus(objectiveDifficultyToInt(objective) * 3)
-                            if (objectiveDifficultyToInt(objective) == 4
-                                || objectiveDifficultyToInt(objective) == 5
-                            ) adventurer.experiencePoints.minus(objectiveDifficultyToInt(objective))
-                        }
-                        adventurersRepo.update(adventurerID, adventurer)
-                        return true
-                    }
-                } catch (e: Exception) {
-                    throw Exception("can't get Daily with taskName:${objective.name} while trying to complete it", e)
-                }
-            }
+//            ObjectiveType.DAILY ->{
+//                try {
+//                    if (objective.checkDeadline()) {
+//                        objective.completionCount = objective.completionCount?.plus(1)
+//                        if (isGreedy == null) {
+//                            Reward(
+//                                2 * objectiveDifficultyToInt(objective),
+//                                2 * objectiveDifficultyToInt(objective),
+//                                null
+//                            ).getReward(adventurer)
+//                        } else {
+//                            Reward(
+//                                2 * objectiveDifficultyToInt(objective),
+//                                2 * objectiveDifficultyToInt(objective),
+//                                null
+//                            ).getGreedyReward(adventurer)
+//                        }
+//                        LocalDate.parse(objective.deadline.toString(), DateTimeFormatter.ISO_DATE)?.plusDays(1)
+//                        transaction {
+//                            objectiveTable.update({
+//                                (objectiveTable.adventurerId eq adventurer.id) and (objectiveTable.name eq objective.name)
+//                            }) {
+//                                fill(it, objective)
+//                            } > 0
+//                        }
+//                        adventurersRepo.update(adventurerID, adventurer)
+//                        return true
+//                    } else {
+//                        if (adventurer.buffs.firstOrNull {
+//                                it.name == "Friendly protection"
+//                                        || it.name == "Shield protection"
+//                            } == null) {
+//                            adventurer.healthPoints.minus(objectiveDifficultyToInt(objective) * 3)
+//                            if (objectiveDifficultyToInt(objective) == 4
+//                                || objectiveDifficultyToInt(objective) == 5
+//                            ) adventurer.experiencePoints.minus(objectiveDifficultyToInt(objective))
+//                        }
+//                        adventurersRepo.update(adventurerID, adventurer)
+//                        return true
+//                    }
+//                } catch (e: Exception) {
+//                    throw Exception("can't get Daily with taskName:${objective.name} while trying to complete it", e)
+//                }
+//            }
             ObjectiveType.TODO ->{
                 try {
                     if (objective.checkDeadline()) {

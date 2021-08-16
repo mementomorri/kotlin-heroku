@@ -61,7 +61,7 @@ class ObjectiveTable(): DefaultIdTable<Objective>(){
         builder[completionCount] = item.completionCount
     }
 
-    override fun readResult(result: ResultRow): Objective? =
+    override fun readResult(result: ResultRow): Objective =
         Objective(
             result[id].value,
             result[name],

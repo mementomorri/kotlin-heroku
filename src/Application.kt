@@ -116,12 +116,12 @@ private fun initDB() {
     abilitiesRepo.create(huntersFocus)
     abilitiesRepo.create(swordplayPractice)
 
-    objectivesRepo.create(Objective(1, "Touch the beauty", "Touch Mosi's tail","DAILY", 1, "HARD",null,null,0))
+    objectivesRepo.create(Objective(1, "Touch the beauty", "Touch Mosi's tail","HABIT", 1, "HARD",null,null,0))
 
     adventurersRepo.read().forEach { adventurer ->
         objectivesRepo.create(Objective(nextObjectiveId(),"Brush the teeth", "Brush the teeth every morning",
             "HABIT",adventurer.id,"VERYEASY",null,LocalDate.now().format(DateTimeFormatter.ISO_DATE)))
-        objectivesRepo.create(Objective(nextObjectiveId(),"Stretch at the morning", "Stretch at least 5 minutes a day", "DAILY",adventurer.id,"EASY",
+        objectivesRepo.create(Objective(nextObjectiveId(),"Stretch at the morning", "Stretch at least 5 minutes a day", "HABIT",adventurer.id,"EASY",
             LocalDate.now().plusDays(1).format(DateTimeFormatter.ISO_DATE),LocalDate.now().format(DateTimeFormatter.ISO_DATE)))
         objectivesRepo.create(Objective(nextObjectiveId(),"Pet the cats", "Pet Mosi and Simi", "TODO", adventurer.id, "MEDIUM",
         LocalDate.now().plusWeeks(1).format(DateTimeFormatter.ISO_DATE),LocalDate.now().format(DateTimeFormatter.ISO_DATE)))
@@ -138,7 +138,6 @@ private fun initDB() {
         }
     }
     println("Database default state initialized")
-    println("Start of use case tests")
 }
 
 fun nextObjectiveId():Int{

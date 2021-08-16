@@ -2,7 +2,7 @@ package model.main_classes
 
 enum class ObjectiveType{
     HABIT,
-    DAILY,
+//    DAILY,
     TODO,
     QUEST
 }
