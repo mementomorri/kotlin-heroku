@@ -27,7 +27,7 @@ fun Application.adventurersRest(
         path:String= "/adventurers",
         adventurerSerializer: KSerializer<Adventurer> = Adventurer.serializer(),
         itemSerializer: KSerializer<Item> = Item.serializer(),
-        objectiveSerializer: KSerializer<Objective> = Objective.serializer(),
+//         objectiveSerializer: KSerializer<Objective> = Objective.serializer(),
         abilitySerializer: KSerializer<Ability> = Ability.serializer(),
         buffSerializer: KSerializer<Buff> = Buff.serializer()
 ){
